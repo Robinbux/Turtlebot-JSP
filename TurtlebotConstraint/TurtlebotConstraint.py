@@ -143,15 +143,15 @@ class TurtlebotConstraint(JSPSolver):
             operation_time_slots.sort(key=lambda x: x[0])
             for i in range(len(operation_time_slots) - 1):
                 walking_op = self.get_operation_x(operation_time_slots[i][1])
-                # operation_time_slots[i][1] # wann startet es?
+                # operation_time_slots[i][0] # wann startet es?
                 # walking_op[1] # wie lange braucht es?
                 # walking_op[3] # wo ended es
                 # self.get_operation_x(i+1)[2] # wo fängt das nächste an?
                 # self.WALKING_TIME[walking_op[3]][self.get_operation_x(operation_time_slots[i+1][1])[2]] # Laufzeit
-                # operation_time_slots[i+1][1] # Wann fängt das nächste an
-                if operation_time_slots[i][1] + walking_op[1] + \
+                # operation_time_slots[i+1][0] # Wann fängt das nächste an
+                if operation_time_slots[i][0] + walking_op[1] + \
                         self.WALKING_TIME[walking_op[3]][self.get_operation_x(operation_time_slots[i+1][1])[2]] \
-                        > operation_time_slots[i + 1][1]:
+                        > operation_time_slots[i + 1][0]:
                     return False
         return True
 

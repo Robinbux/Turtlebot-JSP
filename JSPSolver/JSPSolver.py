@@ -36,10 +36,10 @@ class JSPSolver:
 
         self.NUMBER_OF_OPERATIONS = self.__get_number_of_operations()
         self.NUMBER_OF_MACHINES = self.__get_number_of_machines()
-        self.NUMBER_OF_BOTS = 1
+        self.NUMBER_OF_BOTS = 2
         self.NUMBER_OF_WALKING_OPERATIONS = self.__get_number_of_walking_operations()
         self.NUMBER_OF_INDIVIDUAL_WALKING_OPERATIONS = self.NUMBER_OF_WALKING_OPERATIONS * self.NUMBER_OF_BOTS
-        self.UPPER_TIME_LIMIT = 12
+        self.UPPER_TIME_LIMIT = 8
         self.MAX_WALK_TIME = self.__get_max_walk_time()
 
         self.FLATTENED_OPERATIONS = self.__merge_operations()
