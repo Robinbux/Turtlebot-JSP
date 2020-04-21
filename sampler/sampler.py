@@ -4,7 +4,7 @@
 import dimod
 import neal
 
-num_reads = 20  # Number of samples / quantum computations
+num_reads = 100  # Number of samples / quantum computations
 
 
 def simulated_annealing(QUBO):

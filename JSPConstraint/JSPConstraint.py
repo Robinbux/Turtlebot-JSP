@@ -18,9 +18,15 @@ class JSPConstraint(JSPSolver):
     def validate_response(self, response):
         """Returns constraint, if not followed, None otherwise"""
         operation_results = self.convert_response_to_operation_results(response)
-        if not self.__h1_constraint_is_fulfilled(operation_results): return 'h1'
-        if not self.__h2_constraint_is_fulfilled(operation_results): return 'h2'
-        if not self.__h3_constraint_is_fulfilled(operation_results): return 'h3'
+        quick_check = self.response_quick_check_must_fix_later(response)
+        if quick_check == 'h1':
+            return 'h1'
+        if not self.__h1_constraint_is_fulfilled(operation_results):
+            return 'h1'
+        if not self.__h2_constraint_is_fulfilled(operation_results):
+            return 'h2'
+        if not self.__h3_constraint_is_fulfilled(operation_results):
+            return 'h3'
         return None
 
     #
@@ -64,10 +70,10 @@ class JSPConstraint(JSPSolver):
 
     # AUTOMATIZATION
     # Check for h1
-    # TODO: FIX
     def __h1_constraint_is_fulfilled(self, operation_results):
-        if len(operation_results) != self.NUMBER_OF_OPERATIONS:
-            return False
+        for i in range(self.NUMBER_OF_OPERATIONS):
+            if i not in operation_results:
+                return False
         return True
 
     # Check for h2
