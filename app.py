@@ -17,6 +17,11 @@ def main(args=None):
     while nbr_of_constraint_success < 10 and total_number_of_tries < 1000:
 
         jsp_constraint = JSPConstraint(params["alpha"], params["beta"], params["gamma"])
+
+        #jsp_constraint.plot_operations()
+        #return
+
+
         jsp_constraint.add_constraints()
 
         jsp_optimization = JSPOptimization(params["delta"], params["epsilon"], params["zeta"])

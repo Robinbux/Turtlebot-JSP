@@ -27,9 +27,9 @@ class TurtlebotConstraint(JSPSolver):
             return 'h4'
         if not self.__h4_constraint_is_fulfilled(operation_results): return 'h4'
         #if not self.__h5_constraint_is_fulfilled(operation_results): return 'h5'
+        if not self.__h6_constraint_is_fulfilled(operation_results): return 'h6'
         if not self.__h7_constraint_is_fulfilled(operation_results): return 'h7'
         if not self.__h8_constraint_is_fulfilled(operation_results): return 'h8'
-        if not self.__h6_constraint_is_fulfilled(operation_results): return 'h6'
         return None
 
     #

@@ -1,5 +1,7 @@
 import numpy as np
 import plotly.figure_factory as ff
+from plotly.subplots import make_subplots
+import plotly.graph_objects as go
 
 from Flags.Flags import Flags
 
@@ -11,18 +13,6 @@ class JSPSolver:
     qubo_initialized = False
 
     def __init__(self):
-        # Jobs
-        #self.JOBS_DATA = [  # task = (machine_id, processing_time).
-        #    [(0, 1), (1, 1)],  # Job0
-        #    [(1, 1), (0, 1)],  # Job1
-        #]
-
-        # Machine walking times
-        #self.WALKING_TIME = [
-        #    [0, 1],
-        #    [1, 0]
-        #]
-
         self.JOBS_DATA = [  # task = (machine_id, processing_time).
             [(0, 2), (1, 1)],  # Job0
             [(0, 1), (2, 1), (0, 2)]  # Job1
@@ -39,7 +29,7 @@ class JSPSolver:
         self.NUMBER_OF_BOTS = 2
         self.NUMBER_OF_WALKING_OPERATIONS = self.__get_number_of_walking_operations()
         self.NUMBER_OF_INDIVIDUAL_WALKING_OPERATIONS = self.NUMBER_OF_WALKING_OPERATIONS * self.NUMBER_OF_BOTS
-        self.UPPER_TIME_LIMIT = 8
+        self.UPPER_TIME_LIMIT = 11
         self.MAX_WALK_TIME = self.__get_max_walk_time()
 
         self.FLATTENED_OPERATIONS = self.__merge_operations()
@@ -98,7 +88,46 @@ class JSPSolver:
     def plot_operations(self, response):
         if not Flags.plot_graph:
             return
+
         operation_results = self.convert_response_to_operation_results(response)
+
+        fig = make_subplots(
+            rows=1, cols=1,
+            specs=[[{"type": "xy"}]],
+        )
+
+        standard_op_fig = self.plot_standard_operations(operation_results)
+        bot_op_fig = self.plot_bot_operations(operation_results)
+
+        fig.add_traces(list(standard_op_fig.data), rows=[1]*len(list(standard_op_fig.data)),
+                       cols=[1]*len(list(standard_op_fig.data)))
+        fig.layout.update(standard_op_fig.layout)
+
+        fig.add_traces(list(bot_op_fig.data), rows=[1] * len(list(bot_op_fig.data)),
+                       cols=[1] * len(list(bot_op_fig.data)))
+
+        fig.show()
+
+    def plot_bot_operations(self, operation_results):
+        fig = go.Figure()
+
+        for b in range(self.NUMBER_OF_BOTS):
+            walking_operations = self.get_walking_operation_indexes_for_bot_b(b)
+            bot_traces_x = []
+            bot_traces_y = []
+            for w in walking_operations:
+                if w in operation_results:
+                    current_op = self.get_operation_x(w)
+                    times = np.array(list(range(operation_results[w], operation_results[w] + current_op[1] + 1)))
+                    machines = self.NUMBER_OF_MACHINES - 1 - np.array(np.linspace(current_op[2], current_op[3], current_op[1] + 1))
+                    times, machines = zip(*sorted(zip(times, machines)))
+                    bot_traces_x = np.append(bot_traces_x, times)
+                    bot_traces_y = np.append(bot_traces_y, machines)
+            fig.add_trace(go.Scatter(x=bot_traces_x, y=bot_traces_y, mode='lines+markers', name='Bot ' + str(b)))
+
+        return fig
+
+    def plot_standard_operations(self, operation_results):
         df = []
 
         for j in range(len(self.JOBS_DATA)):
@@ -114,17 +143,17 @@ class JSPSolver:
                   'Job-2': 'rgb(97,201,168)',
                   'Job-3': 'rgb(255,238,219)'}
 
-        fig = ff.create_gantt(df, colors=colors, index_col='Resource', show_colorbar=True,
-                              group_tasks=True, bar_width=0.3, title='Solution')
+        standard_op_fig = ff.create_gantt(df, colors=colors, index_col='Resource', show_colorbar=True,
+                                          group_tasks=True, bar_width=0.3, title='Solution')
 
-        fig.layout.xaxis = dict(
+        standard_op_fig.layout.xaxis = dict(
             automargin=True,
             dtick=1,
             title_text="Time t")
 
-        fig.layout.yaxis.autorange = True
+        standard_op_fig.layout.yaxis.autorange = True
 
-        fig.show()
+        return standard_op_fig
 
     def get_operation_indexes_for_walking_operation_w(self, w):
         """Return a list off all indexes of Ww"""
