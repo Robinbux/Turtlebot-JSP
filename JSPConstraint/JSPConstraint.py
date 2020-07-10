@@ -1,14 +1,12 @@
 import numpy as np
 from JSPSolver.JSPSolver import JSPSolver
+from lagrange.Lagrange import Lagrange
 
 
 class JSPConstraint(JSPSolver):
 
-    def __init__(self, alpha, beta, gamma):
+    def __init__(self):
         super().__init__()
-        self.ALPHA = alpha
-        self.BETA = beta
-        self.GAMMA = gamma
 
     def add_constraints(self):
         self.__add_h1_constraint()
@@ -36,9 +34,9 @@ class JSPConstraint(JSPSolver):
         for i in range(self.NUMBER_OF_OPERATIONS):
             for u in range(self.UPPER_TIME_LIMIT):
                 for t in range(u):
-                    self.fill_QUBO_with_indexes(i, t, i, u, self.ALPHA * 2)
+                    self.fill_QUBO_with_indexes(i, t, i, u, Lagrange.alpha * 2)
             for t in range(self.UPPER_TIME_LIMIT):
-                self.fill_QUBO_with_indexes(i, t, i, t, -self.ALPHA)
+                self.fill_QUBO_with_indexes(i, t, i, t, -Lagrange.alpha)
 
     #
     # h2 implementation
@@ -54,7 +52,7 @@ class JSPConstraint(JSPSolver):
                     for t in range(self.UPPER_TIME_LIMIT):
                         for t_prime in range(self.UPPER_TIME_LIMIT):
                             if Rm_condition_fulfilled(i, t, i_prime, t_prime, self.UPPER_TIME_LIMIT):
-                                self.fill_QUBO_with_indexes(i, t, i_prime, t_prime, self.BETA)
+                                self.fill_QUBO_with_indexes(i, t, i_prime, t_prime, Lagrange.beta)
 
     #
     # h3 implementation
@@ -66,7 +64,7 @@ class JSPConstraint(JSPSolver):
                 for t in range(self.UPPER_TIME_LIMIT):
                     for t_prime in range(self.UPPER_TIME_LIMIT):
                         if (t + self.get_operation_x(i)[1]) > t_prime:
-                            self.fill_QUBO_with_indexes(i, t, i + 1, t_prime, self.GAMMA)
+                            self.fill_QUBO_with_indexes(i, t, i + 1, t_prime, Lagrange.gamma)
 
     # AUTOMATIZATION
     # Check for h1

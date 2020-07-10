@@ -13,29 +13,39 @@ class JSPSolver:
     qubo_initialized = False
 
     def __init__(self):
-        self.JOBS_DATA = [  # task = (machine_id, processing_time).
-            [(0, 2), (1, 1)],  # Job0
-            [(0, 1), (2, 1), (0, 2)]  # Job1
+
+        self.JOBS_DATA = [
+            [[1, 1],[3, 2],[0, 1],[2, 3]],
+            [[1, 1],[2, 2],[3, 1],[0, 3]],
+            [[0, 1],[3, 2],[1, 1],[2, 3]],
+            [[2, 1],[0, 2],[3, 1],[1, 3]]
         ]
 
         self.WALKING_TIME = [
-            [0, 1, 2],
-            [1, 0, 3],
-            [2, 3, 0]
+            [0, 1, 3, 2],
+            [1, 0, 2, 1],
+            [3, 2, 0, 2],
+            [2, 1, 2, 0],
          ]
+
+
+
+
 
         self.NUMBER_OF_OPERATIONS = self.__get_number_of_operations()
         self.NUMBER_OF_MACHINES = self.__get_number_of_machines()
-        self.NUMBER_OF_BOTS = 2
+        self.NUMBER_OF_BOTS = 3
         self.NUMBER_OF_WALKING_OPERATIONS = self.__get_number_of_walking_operations()
         self.NUMBER_OF_INDIVIDUAL_WALKING_OPERATIONS = self.NUMBER_OF_WALKING_OPERATIONS * self.NUMBER_OF_BOTS
-        self.UPPER_TIME_LIMIT = 11
+        self.UPPER_TIME_LIMIT = 15
         self.MAX_WALK_TIME = self.__get_max_walk_time()
 
         self.FLATTENED_OPERATIONS = self.__merge_operations()
+        #self.FLATTENED_OPERATIONS = [(0, 1), (1, 1),(0, 1)]
 
         if not JSPSolver.qubo_initialized:
             QUBO_LENGTH = self.UPPER_TIME_LIMIT * (self.NUMBER_OF_OPERATIONS + self.NUMBER_OF_INDIVIDUAL_WALKING_OPERATIONS)
+            #QUBO_LENGTH = self.UPPER_TIME_LIMIT * (self.NUMBER_OF_OPERATIONS)
             JSPSolver.QUBO = np.zeros((QUBO_LENGTH, QUBO_LENGTH))
             JSPSolver.qubo_initialized = True
 
@@ -152,6 +162,8 @@ class JSPSolver:
             title_text="Time t")
 
         standard_op_fig.layout.yaxis.autorange = True
+
+        standard_op_fig.layout.legend = {'traceorder':'reversed'}
 
         return standard_op_fig
 

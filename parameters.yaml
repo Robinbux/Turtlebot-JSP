@@ -1,13 +1,13 @@
-alpha: 90
-beta: 8
-gamma: 11
+alpha: 1
+beta: 1
+gamma: 1
 
-delta: 1
-epsilon: 1
-zeta: 1
+delta: 0
+epsilon: 0
+zeta: 0
 
-eta: 65
+eta: 1
 theta: 1
-iota: 11
-kappa: 52
-my: 64
+iota: 1
+kappa: 1
+my: 1

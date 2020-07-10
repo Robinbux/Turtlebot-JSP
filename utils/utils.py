@@ -1,6 +1,7 @@
 import yaml
 
 from Flags.Flags import Flags
+from lagrange.Lagrange import Lagrange
 
 
 def load_params():
@@ -11,17 +12,17 @@ def load_params():
             print(exc)
 
 
-def print_params(alpha, beta, gamma, eta, theta, iota, kappa, my):
+def print_params():
     Flags.verbose_print("---PARAMETERS---")
-    Flags.verbose_print("Alpha: " + str(alpha))
-    Flags.verbose_print("Beta: " + str(beta))
-    Flags.verbose_print("Gamma: " + str(gamma))
+    Flags.verbose_print("Alpha: " + str(Lagrange.alpha))
+    Flags.verbose_print("Beta: " + str(Lagrange.beta))
+    Flags.verbose_print("Gamma: " + str(Lagrange.gamma))
     Flags.verbose_print("")
-    Flags.verbose_print("Eta: " + str(eta))
-    Flags.verbose_print("Theta: " + str(theta))
-    Flags.verbose_print("Iota: " + str(iota))
-    Flags.verbose_print("Kappa: " + str(kappa))
-    Flags.verbose_print("My: " + str(my))
+    Flags.verbose_print("Eta: " + str(Lagrange.eta))
+    Flags.verbose_print("Theta: " + str(Lagrange.theta))
+    Flags.verbose_print("Iota: " + str(Lagrange.iota))
+    Flags.verbose_print("Kappa: " + str(Lagrange.kappa))
+    Flags.verbose_print("My: " + str(Lagrange.my))
     Flags.verbose_print("")
 
 
