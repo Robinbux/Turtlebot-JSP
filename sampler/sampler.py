@@ -43,8 +43,8 @@ def simulated_annealing(QUBO):
     sampler = neal.SimulatedAnnealingSampler()
 
 
-    response = sim_sample(sampler, bqm)
-    #response = real_sample(sampler, bqm)
+    #response = sim_sample(sampler, bqm)
+    response = real_sample(sampler, bqm)
 
 
     return response

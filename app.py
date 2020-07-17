@@ -13,9 +13,11 @@ def main(args=None):
     Lagrange.load_params()
     Flags.parse_arguments(args)
 
+    Flags.verbose_print("Starting...")
+
     nbr_of_constraint_success = 0
     total_number_of_tries = 0
-    while nbr_of_constraint_success < 10 and total_number_of_tries < 1000:
+    while nbr_of_constraint_success < 1 and total_number_of_tries < 1000:
 
         jsp_constraint = JSPConstraint()
         jsp_constraint.add_constraints()
@@ -27,6 +29,8 @@ def main(args=None):
         turtlebot_constraint.add_constraints()
 
         response = simulated_annealing(JSPSolver.QUBO)
+
+        
 
         jsp_constraint_passed = True
         # Check JSP Constraint
@@ -74,6 +78,8 @@ def main(args=None):
         print_params()
 
         nbr_of_constraint_success += 1
+
+
         total_number_of_tries += 1
 
     print_params()

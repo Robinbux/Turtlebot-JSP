@@ -15,29 +15,28 @@ class JSPSolver:
     def __init__(self):
 
         self.JOBS_DATA = [
-            [[1, 1],[3, 2],[0, 1],[2, 3]],
-            [[1, 1],[2, 2],[3, 1],[0, 3]],
-            [[0, 1],[3, 2],[1, 1],[2, 3]],
-            [[2, 1],[0, 2],[3, 1],[1, 3]]
+            [[0, 0],[2, 1],[4, 3],[1, 6],[3, 7],[5, 0]],
+            [[0, 0],[2, 5],[3, 4],[4, 9],[1, 1],[5, 0]],
+            [[0, 0],[1, 5],[4, 5],[2, 5],[3, 3],[5, 0]],
+            [[0, 0],[2, 9],[1, 3],[4, 3],[3, 1],[5, 0]]
         ]
 
         self.WALKING_TIME = [
-            [0, 1, 3, 2],
-            [1, 0, 2, 1],
-            [3, 2, 0, 2],
-            [2, 1, 2, 0],
-         ]
-
-
-
+            [0, 1, 3, 1, 3, 4],
+            [1, 0, 2, 1, 2, 3],
+            [3, 2, 0, 2, 1, 1],
+            [1, 1, 2, 0, 2, 3],
+            [3, 2, 1, 2, 0, 1],
+            [4, 3, 1, 3, 1, 0]
+        ]
 
 
         self.NUMBER_OF_OPERATIONS = self.__get_number_of_operations()
         self.NUMBER_OF_MACHINES = self.__get_number_of_machines()
-        self.NUMBER_OF_BOTS = 3
+        self.NUMBER_OF_BOTS = 1
         self.NUMBER_OF_WALKING_OPERATIONS = self.__get_number_of_walking_operations()
         self.NUMBER_OF_INDIVIDUAL_WALKING_OPERATIONS = self.NUMBER_OF_WALKING_OPERATIONS * self.NUMBER_OF_BOTS
-        self.UPPER_TIME_LIMIT = 15
+        self.UPPER_TIME_LIMIT = 68
         self.MAX_WALK_TIME = self.__get_max_walk_time()
 
         self.FLATTENED_OPERATIONS = self.__merge_operations()
@@ -118,6 +117,41 @@ class JSPSolver:
 
         fig.show()
 
+    def plot_operations__TEMP(self, operation_results):
+        fig = make_subplots(
+            rows=1, cols=1,
+            specs=[[{"type": "xy"}]],
+        )
+
+        standard_op_fig = self.plot_standard_operations(operation_results)
+        bot_op_fig = self.plot_bot_operations__TEMP(operation_results)
+
+        fig.add_traces(list(standard_op_fig.data), rows=[1] * len(list(standard_op_fig.data)),
+                       cols=[1] * len(list(standard_op_fig.data)))
+        fig.layout.update(standard_op_fig.layout)
+
+        fig.add_traces(list(bot_op_fig.data), rows=[1] * len(list(bot_op_fig.data)),
+                       cols=[1] * len(list(bot_op_fig.data)))
+
+        fig.show()
+
+    def plot_bot_operations__TEMP(self, operation_results):
+        fig = go.Figure()
+
+        bot_traces_x = [2, 3, 4, 5, 6, 7, 8]
+        bot_traces_y = [2, 1.33333, 0.66667, 0, 0.66667, 1.33333, 2]
+        fig.add_trace(go.Scatter(x=bot_traces_x, y=bot_traces_y, mode='lines+markers', name='Bot 0'))
+
+        bot_traces_x = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+        bot_traces_y = [0, 0.66667, 1.33333, 2, 1, 0.5, 0, 0.5, 1]
+        fig.add_trace(go.Scatter(x=bot_traces_x, y=bot_traces_y, mode='lines+markers', name='Bot 1'))
+
+        bot_traces_x = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+        bot_traces_y = [1, 0.5, 0, 0.66667, 1.33333, 2, 1.33333, 0.66667, 0, 0.5, 1]
+        fig.add_trace(go.Scatter(x=bot_traces_x, y=bot_traces_y, mode='lines+markers', name='Bot 2'))
+
+        return fig
+
     def plot_bot_operations(self, operation_results):
         fig = go.Figure()
 
@@ -138,7 +172,6 @@ class JSPSolver:
         return fig
 
     def plot_standard_operations(self, operation_results):
-        df = []
 
         for j in range(len(self.JOBS_DATA)):
             for o in self.get_operation_indexes_for_job_j(j):
@@ -163,7 +196,7 @@ class JSPSolver:
 
         standard_op_fig.layout.yaxis.autorange = True
 
-        standard_op_fig.layout.legend = {'traceorder':'reversed'}
+        standard_op_fig.layout.legend = {'traceorder':'normal'}
 
         return standard_op_fig
 
